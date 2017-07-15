@@ -8842,6 +8842,7 @@ HEADERS += \
 	"$$EqsContextsRootPath/Source/EqsContexts/EqsContexts.h" \
 	"$$EqsContextsRootPath/Source/EqsContexts/EqsContextsCharacter.h" \
 	"$$EqsContextsRootPath/Source/EqsContexts/EqsContextsGameMode.h" \
+	"$$EqsContextsRootPath/Source/EqsContexts/FindEnemyQueryContext.h" \
 	"$$EqsContextsRootPath/Source/EqsContexts/MyAIController.h" \
  
 

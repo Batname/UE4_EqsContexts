@@ -41,6 +41,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UAIPerceptionComponent* AIPerceptionComponent;
 
+	/** The Perceptionb Component of our AI */
+	UPROPERTY(VisibleAnywhere)
+	class UAIPerceptionComponent* AIPerceptionComp;
+
 public:
 
 	AMyAIController();

@@ -12,25 +12,27 @@
 
 AMyAIController::AMyAIController()
 {
-	// Components init
+	//Components Init.
 	BehaviorTreeComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
-	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
-	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 
-	// Create a Sight sence
+	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
+
+	AIPerceptionComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComp"));
+
+	//Create a Sight Sense
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 
-	Sight->SightRadius = 1000.f;
-	Sight->LoseSightRadius = 1500.f;
-	Sight->PeripheralVisionAngleDegrees = 130.f;
+	Sight->SightRadius = 3000.f;
+	Sight->LoseSightRadius = 3500.f;
+	Sight->PeripheralVisionAngleDegrees = 90.f;
 
-	// Tell the SIght sence to detect everything
+	//Tell the sight sense to detect everything
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
 	Sight->DetectionByAffiliation.bDetectFriendlies = true;
 	Sight->DetectionByAffiliation.bDetectNeutrals = true;
 
-	// Register the Sight sence to our Perception component
-	AIPerceptionComponent->ConfigureSense(*Sight);	
+	//Register the sight sense to our Perception Component
+	AIPerceptionComp->ConfigureSense(*Sight);
 }
 
 
@@ -44,13 +46,16 @@ void AMyAIController::Possess(APawn* InPawn)
 		BlackboardComp->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 		BehaviorTreeComp->StartTree(*BehaviorTree);
 	}
+
+	//Register the OnPerceptionUpdated function to fire whenever the AIPerception get's updated
+	AIPerceptionComp->OnPerceptionUpdated.AddDynamic(this, &AMyAIController::OnPerceptionUpdated);
 }
 
 void AMyAIController::OnPerceptionUpdated(TArray<AActor*> UpdatedActors)
 {
-	// If out character exists inside the UpdatedActors array, register him
-	// to our blackboard component
-	for(AActor* Actor : UpdatedActors)
+	//If our character exists inside the UpdatedActors array, register him
+	//to our blackboard component
+	for (AActor* Actor : UpdatedActors)
 	{
 		if (Actor->IsA<AEqsContextsCharacter>() && !GetSeeingPawn())
 		{
@@ -58,6 +63,10 @@ void AMyAIController::OnPerceptionUpdated(TArray<AActor*> UpdatedActors)
 			return;
 		}
 	}
+
+	//The character doesn't exist in our updated actors - so make sure
+	//to delete any previous reference of him from the blackboard
+	BlackboardComp->SetValueAsObject(BlackboardEnemyKey, nullptr);
 }
 
 AActor* AMyAIController::GetSeeingPawn()

@@ -6829,6 +6829,7 @@ SOURCES += \
 	"$$EqsContextsRootPath/Source/EqsContexts/EqsContexts.cpp" \
 	"$$EqsContextsRootPath/Source/EqsContexts/EqsContextsCharacter.cpp" \
 	"$$EqsContextsRootPath/Source/EqsContexts/EqsContextsGameMode.cpp" \
+	"$$EqsContextsRootPath/Source/EqsContexts/FindEnemyQueryContext.cpp" \
 	"$$EqsContextsRootPath/Source/EqsContexts/MyAIController.cpp" \
  
 
